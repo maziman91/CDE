@@ -21,3 +21,4 @@ Route::get('/export/hl7', [PatientController::class, 'exportHl7'])->name('export
 Route::get('/backup', [PatientController::class, 'backup'])->name('backup');
 Route::post('/restore', [PatientController::class, 'restore'])->name('restore');
 Route::post('/reset', [PatientController::class, 'reset'])->name('reset');
+Route::view('/system', 'system.index')->name('system.index');
