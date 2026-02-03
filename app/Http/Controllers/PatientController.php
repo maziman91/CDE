@@ -12,16 +12,27 @@ class PatientController extends Controller
     /**
      * Display the main dashboard
      */
-    public function index()
+    public function index(Request $request)
     {
-        $patients = Patient::latest()->get();
+        $query = Patient::latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('patient_name', 'like', "%{$search}%")
+                    ->orWhere('ic_number', 'like', "%{$search}%");
+            });
+        }
+
+        $patients = $query->paginate(10)->withQueryString();
+
         $stats = [
-            'total' => $patients->count(),
-            'avg_hba1c' => $patients->avg('hba1c'),
-            'high_risk' => $patients->filter(fn($p) => $p->isHighRisk())->count(),
-            'avg_bmi' => $patients->avg('bmi'),
+            'total' => Patient::count(),
+            'avg_hba1c' => Patient::avg('hba1c'),
+            'high_risk' => Patient::where('hba1c', '>', 8.0)->count(),
+            'avg_bmi' => Patient::avg('bmi'),
         ];
-        
+
         return view('patients.index', compact('patients', 'stats'));
     }
 
@@ -156,12 +167,35 @@ class PatientController extends Controller
         ];
 
         $columns = [
-            'Date of Visit', 'Patient Name', 'IC Number', 'Phone No', 'Gender', 'Age',
-            'Visit Setting', 'Referral Source', 'Triage Priority', 'Diabetes Type',
-            'Duration (Years)', 'Reason for Referral', 'Weight (kg)', 'BMI', 'BP',
-            'HbA1c (%)', 'eGFR', 'Current Meds', 'Insulin Technique', 'Adherence Issue',
-            'Lipodystrophy', 'Dietary Pattern', 'Smoking Status', 'Hypoglycemia History',
-            'SMBG Frequency', 'Topics Covered', 'SMART Goal', 'Next Follow Up', 'Educator Name'
+            'Date of Visit',
+            'Patient Name',
+            'IC Number',
+            'Phone No',
+            'Gender',
+            'Age',
+            'Visit Setting',
+            'Referral Source',
+            'Triage Priority',
+            'Diabetes Type',
+            'Duration (Years)',
+            'Reason for Referral',
+            'Weight (kg)',
+            'BMI',
+            'BP',
+            'HbA1c (%)',
+            'eGFR',
+            'Current Meds',
+            'Insulin Technique',
+            'Adherence Issue',
+            'Lipodystrophy',
+            'Dietary Pattern',
+            'Smoking Status',
+            'Hypoglycemia History',
+            'SMBG Frequency',
+            'Topics Covered',
+            'SMART Goal',
+            'Next Follow Up',
+            'Educator Name'
         ];
 
         $callback = function () use ($patients, $columns) {
@@ -215,7 +249,7 @@ class PatientController extends Controller
     {
         $patients = Patient::all();
         $hl7Messages = $patients->map(fn($p) => $p->generateHL7Message())->implode("\r\r");
-        
+
         return response($hl7Messages)
             ->header('Content-Type', 'text/plain')
             ->header('Content-Disposition', 'attachment; filename="batch_export.hl7"');
@@ -242,14 +276,14 @@ class PatientController extends Controller
 
         try {
             $data = json_decode(file_get_contents($request->file('backup_file')->getRealPath()), true);
-            
+
             if (!is_array($data)) {
                 return back()->with('error', 'Invalid backup file.');
             }
 
             DB::statement('SET FOREIGN_KEY_CHECKS=0');
             Patient::truncate();
-            
+
             foreach ($data as $patientData) {
                 Patient::create([
                     'date_of_visit' => $patientData['date_of_visit'] ?? now(),
@@ -283,9 +317,9 @@ class PatientController extends Controller
                     'educator_name' => $patientData['educator_name'] ?? 'SN Sarah',
                 ]);
             }
-            
+
             DB::statement('SET FOREIGN_KEY_CHECKS=1');
-            
+
             return redirect()->route('patients.index')
                 ->with('success', 'System restored successfully! ' . count($data) . ' records imported.');
         } catch (\Exception $e) {
