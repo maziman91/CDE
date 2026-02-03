@@ -12,6 +12,24 @@ class PatientController extends Controller
     /**
      * Display the main dashboard
      */
+    /**
+     * Display the stats dashboard
+     */
+    public function dashboard()
+    {
+        $stats = [
+            'total' => Patient::count(),
+            'avg_hba1c' => Patient::avg('hba1c'),
+            'high_risk' => Patient::where('hba1c', '>', 8.0)->count(),
+            'avg_bmi' => Patient::avg('bmi'),
+        ];
+
+        return view('dashboard', compact('stats'));
+    }
+
+    /**
+     * Display the patient registry
+     */
     public function index(Request $request)
     {
         $query = Patient::latest();
@@ -26,14 +44,7 @@ class PatientController extends Controller
 
         $patients = $query->paginate(10)->withQueryString();
 
-        $stats = [
-            'total' => Patient::count(),
-            'avg_hba1c' => Patient::avg('hba1c'),
-            'high_risk' => Patient::where('hba1c', '>', 8.0)->count(),
-            'avg_bmi' => Patient::avg('bmi'),
-        ];
-
-        return view('patients.index', compact('patients', 'stats'));
+        return view('patients.index', compact('patients'));
     }
 
     /**

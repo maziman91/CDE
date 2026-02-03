@@ -7,13 +7,13 @@
 
     <!-- Navigation -->
     <nav class="flex-1 overflow-y-auto py-4">
-        <a href="{{ route('patients.index') }}"
-            class="flex items-center px-6 py-3 {{ request()->routeIs('patients.index') ? 'text-gray-700 bg-blue-50 border-r-4 border-blue-600' : 'text-gray-600 hover:bg-gray-50 transition' }}">
+        <a href="{{ route('dashboard') }}"
+            class="flex items-center px-6 py-3 {{ request()->routeIs('dashboard') ? 'text-gray-700 bg-blue-50 border-r-4 border-blue-600' : 'text-gray-600 hover:bg-gray-50 transition' }}">
             <i class="fa-solid fa-chart-pie w-6 text-gray-500"></i>
             <span class="font-medium">Dashboard</span>
         </a>
-        <a href="{{ route('patients.index') }}#patients"
-            class="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50 transition">
+        <a href="{{ route('patients.index') }}"
+            class="flex items-center px-6 py-3 {{ request()->routeIs('patients.*') ? 'text-gray-700 bg-blue-50 border-r-4 border-blue-600' : 'text-gray-600 hover:bg-gray-50 transition' }}">
             <i class="fa-solid fa-users w-6 text-gray-500"></i>
             <span class="font-medium">Patient Registry</span>
         </a>
