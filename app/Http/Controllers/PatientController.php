@@ -37,6 +37,22 @@ class PatientController extends Controller
     }
 
     /**
+     * Show the form for creating a new patient
+     */
+    public function create()
+    {
+        return view('patients.create');
+    }
+
+    /**
+     * Show the form for editing the specified patient
+     */
+    public function edit(Patient $patient)
+    {
+        return view('patients.edit', compact('patient'));
+    }
+
+    /**
      * Store a new patient
      */
     public function store(Request $request)
