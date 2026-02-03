@@ -1,0 +1,1 @@
+[{"register()": "void\n    {\n        $this->app->bind(PatientService::class);"}, {"/Routes/web.php');\n        $this->loadViewsFrom(__DIR__ . '/Views', 'patients');\n        \n        $this->publishes([\n            __DIR__ . '/Views' => resource_path('views/modules/patients'),\n        ], 'patients-views": ""}]
