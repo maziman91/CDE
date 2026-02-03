@@ -59,11 +59,17 @@
                             <p>• Intensive education on foot inspection.</p>
                             <p>• Footwear evaluation by professional.</p>
                             <p>• Screening every 3-6 months.</p>
-                        @else
-                            <p class="text-white font-bold">• URGENT Referral to Podiatry/Wound Care.</p>
+                        @elseif($footAssessment->risk_category == '2')
+                            <p>• URGENT Referral to Podiatry/Wound Care.</p>
                             <p>• Diabetic therapeutic footwear indicated.</p>
                             <p>• Daily monitoring by family/caregiver.</p>
-                            <p>• Clinical review every 1-3 months.</p>
+                            <p>• Clinical review every 1-2 months.</p>
+                        @elseif($footAssessment->risk_category == '3')
+                            <p class="text-white font-bold underline mb-2">CRITICAL RISK - URGENT INTERVENTION</p>
+                            <p>• Multidisciplinary foot team referral within 24h.</p>
+                            <p>• Absolute offloading if current ulcer present.</p>
+                            <p>• Aggressive vascular follow-up if PAD present.</p>
+                            <p>• Clinical review every 1-4 weeks.</p>
                         @endif
                     </div>
                 </div>

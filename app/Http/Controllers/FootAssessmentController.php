@@ -53,7 +53,8 @@ class FootAssessmentController extends Controller
             'remarks' => 'nullable|string',
         ]);
 
-        [$category, $level] = FootAssessment::determineRisk($data);
+        $patient = Patient::findOrFail($data['patient_id']);
+        [$category, $level] = FootAssessment::determineRisk($data, $patient);
         $data['risk_category'] = $category;
         $data['risk_level'] = $level;
 

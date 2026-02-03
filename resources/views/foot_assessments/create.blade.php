@@ -20,8 +20,18 @@
                     <h2 class="font-bold text-gray-800">{{ $patient->patient_name }}</h2>
                     <p class="text-xs text-gray-500">IC: {{ $patient->ic_number }} | Age: {{ $patient->age }}</p>
                 </div>
-                <div id="risk-preview" class="px-4 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800">
-                    Low Risk (Initial)
+                <div class="flex items-center gap-4">
+                    @if($patient->egfr)
+                        <div class="text-right px-4 border-r border-gray-200">
+                            <p class="text-[10px] text-gray-400 font-bold uppercase">Latest eGFR</p>
+                            <p class="text-sm font-bold {{ $patient->egfr < 15 ? 'text-red-600' : 'text-gray-700' }}">
+                                {{ $patient->egfr }} <span class="text-[10px] font-normal text-gray-400">mL/min</span>
+                            </p>
+                        </div>
+                    @endif
+                    <div id="risk-preview" class="px-4 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800">
+                        Low Risk (Initial)
+                    </div>
                 </div>
             </div>
 

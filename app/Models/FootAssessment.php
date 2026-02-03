@@ -63,30 +63,48 @@ class FootAssessment extends Model
 
     /**
      * Logic to determine risk category based on parameters
+     * Based on IWGDF/CPG Guidelines
      */
-    public static function determineRisk($data)
+    public static function determineRisk($data, $patient = null)
     {
-        // Category 3: History of ulcer or amputation (either foot)
-        if ($data['r_ulcer'] || $data['r_amputation'] || $data['l_ulcer'] || $data['l_amputation']) {
+        $r_lops = !($data['r_sensation'] ?? true);
+        $l_lops = !($data['l_sensation'] ?? true);
+        $lops = $r_lops || $l_lops;
+
+        $r_pad = (($data['r_pulse_dp'] ?? 'Present') !== 'Present' || ($data['r_pulse_pt'] ?? 'Present') !== 'Present');
+        $l_pad = (($data['l_pulse_dp'] ?? 'Present') !== 'Present' || ($data['l_pulse_pt'] ?? 'Present') !== 'Present');
+        $pad = $r_pad || $l_pad;
+
+        $r_deformity = (bool) ($data['r_deformity'] ?? false);
+        $l_deformity = (bool) ($data['l_deformity'] ?? false);
+        $deformity = $r_deformity || $l_deformity;
+
+        $r_history = ($data['r_ulcer'] ?? false) || ($data['r_amputation'] ?? false);
+        $l_history = ($data['l_ulcer'] ?? false) || ($data['l_amputation'] ?? false);
+        $history = $r_history || $l_history;
+
+        // Check for ESRD (eGFR < 15)
+        $esrd = false;
+        if ($patient && isset($patient->egfr)) {
+            $esrd = $patient->egfr < 15;
+        }
+
+        // Category 3: (LOPS or PAD) AND (History of ulcer/amputation OR ESRD)
+        if (($lops || $pad) && ($history || $esrd)) {
             return ['3', 'Very High Risk'];
         }
 
-        $r_lops = !$data['r_sensation'];
-        $l_lops = !$data['l_sensation'];
-        $r_pad = ($data['r_pulse_dp'] !== 'Present' || $data['r_pulse_pt'] !== 'Present');
-        $l_pad = ($data['l_pulse_dp'] !== 'Present' || $data['l_pulse_pt'] !== 'Present');
-
-        // Category 2: LOPS + Deformity or PAD
-        if (($r_lops && ($data['r_deformity'] || $r_pad)) || ($l_lops && ($data['l_deformity'] || $l_pad))) {
+        // Category 2: LOPS + PAD, or LOPS + Deformity, or PAD + Deformity
+        if (($lops && $pad) || ($lops && $deformity) || ($pad && $deformity)) {
             return ['2', 'High Risk'];
         }
 
-        // Category 1: LOPS only
-        if ($r_lops || $l_lops) {
+        // Category 1: LOPS or PAD only
+        if ($lops || $pad) {
             return ['1', 'Moderate Risk'];
         }
 
-        // Category 0: No LOPS
+        // Category 0: No LOPS and No PAD
         return ['0', 'Low Risk'];
     }
 }
