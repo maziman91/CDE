@@ -52,7 +52,8 @@ class PatientController extends Controller
      */
     public function create()
     {
-        return view('patients.create');
+        $screeningData = session('screening_data');
+        return view('patients.create', compact('screeningData'));
     }
 
     /**

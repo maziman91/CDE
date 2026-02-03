@@ -17,6 +17,11 @@
             <i class="fa-solid fa-users w-6 text-gray-500"></i>
             <span class="font-medium">Patient Registry</span>
         </a>
+        <a href="{{ route('screenings.index') }}"
+            class="flex items-center px-6 py-3 {{ request()->routeIs('screenings.*') ? 'text-gray-700 bg-blue-50 border-r-4 border-blue-600' : 'text-gray-600 hover:bg-gray-50 transition' }}">
+            <i class="fa-solid fa-file-medical w-6 text-gray-500"></i>
+            <span class="font-medium">Diabetes Screening</span>
+        </a>
         <a href="{{ route('patients.create') }}"
             class="flex items-center px-6 py-3 {{ request()->routeIs('patients.create') ? 'text-gray-700 bg-blue-50 border-r-4 border-blue-600' : 'text-gray-600 hover:bg-gray-50 transition' }}">
             <i class="fa-solid fa-user-plus w-6 text-gray-500"></i>

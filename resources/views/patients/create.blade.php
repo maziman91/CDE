@@ -41,7 +41,8 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Patient Name <span
                                     class="text-red-500">*</span></label>
-                            <input type="text" name="patient_name" value="{{ old('patient_name') }}" required
+                            <input type="text" name="patient_name"
+                                value="{{ old('patient_name', $screeningData['name'] ?? '') }}" required
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Enter full name">
                             @error('patient_name')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
@@ -50,7 +51,8 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">IC Number <span
                                     class="text-red-500">*</span></label>
-                            <input type="text" name="ic_number" value="{{ old('ic_number') }}" required
+                            <input type="text" name="ic_number"
+                                value="{{ old('ic_number', $screeningData['ic_number'] ?? '') }}" required
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="e.g., 800101-01-5566">
                             @error('ic_number')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
@@ -68,14 +70,14 @@
                                     class="text-red-500">*</span></label>
                             <select name="gender"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white">
-                                <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
-                                <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
+                                <option value="Male" {{ old('gender', $screeningData['gender'] ?? '') == 'Male' ? 'selected' : '' }}>Male</option>
+                                <option value="Female" {{ old('gender', $screeningData['gender'] ?? '') == 'Female' ? 'selected' : '' }}>Female</option>
                             </select>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Age</label>
-                            <input type="number" name="age" value="{{ old('age') }}"
+                            <input type="number" name="age" value="{{ old('age', $screeningData['age'] ?? '') }}"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Years">
                         </div>
@@ -149,7 +151,7 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">BMI</label>
-                            <input type="number" step="0.1" name="bmi" value="{{ old('bmi') }}"
+                            <input type="number" step="0.1" name="bmi" value="{{ old('bmi', $screeningData['bmi'] ?? '') }}"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="kg/m²">
                         </div>

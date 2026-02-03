@@ -15,6 +15,8 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
+use App\Http\Controllers\ScreeningController;
+
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.post');
@@ -23,6 +25,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Protected Routes
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PatientController::class, 'dashboard'])->name('dashboard');
+
+    // Screening Module
+    Route::get('/screenings/{screening}/convert', [ScreeningController::class, 'convertToPatient'])->name('screenings.convert');
+    Route::resource('screenings', ScreeningController::class);
+
     Route::resource('patients', PatientController::class);
 
     Route::get('/patients/{patient}/hl7', [PatientController::class, 'hl7'])->name('patients.hl7');
