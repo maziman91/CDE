@@ -31,13 +31,23 @@
 
     <!-- User Profile -->
     <div class="p-4 border-t border-gray-200">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">SN
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
+                    {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
+                </div>
+                <div class="overflow-hidden">
+                    <p class="text-sm font-semibold text-gray-800 truncate">{{ auth()->user()->name ?? 'User' }}</p>
+                    <p class="text-xs text-gray-500">Diabetes Educator</p>
+                </div>
             </div>
-            <div>
-                <p class="text-sm font-semibold text-gray-800">SN Sarah</p>
-                <p class="text-xs text-gray-500">Diabetes Educator</p>
-            </div>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="text-gray-400 hover:text-red-600 transition" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </form>
         </div>
     </div>
 </aside>
