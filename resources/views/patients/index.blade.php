@@ -81,6 +81,9 @@
                                     <a href="{{ route('patients.edit', $patient) }}" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Edit">
                                         <i class="fa-solid fa-pen"></i>
                                     </a>
+                                    <a href="{{ route('foot_assessments.index', ['patient_id' => $patient->id]) }}" class="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition" title="Foot Assessment">
+                                        <i class="fa-solid fa-socks"></i>
+                                    </a>
                                     <a href="{{ route('patients.hl7', $patient) }}" class="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition" title="Export HL7">
                                         <i class="fa-solid fa-code"></i>
                                     </a>

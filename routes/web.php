@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 
 use App\Http\Controllers\ScreeningController;
+use App\Http\Controllers\FootAssessmentController;
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -29,6 +30,9 @@ Route::middleware('auth')->group(function () {
     // Screening Module
     Route::get('/screenings/{screening}/convert', [ScreeningController::class, 'convertToPatient'])->name('screenings.convert');
     Route::resource('screenings', ScreeningController::class);
+
+    // Foot Assessment Module
+    Route::resource('foot_assessments', FootAssessmentController::class);
 
     Route::resource('patients', PatientController::class);
 
