@@ -42,7 +42,7 @@ class PatientController extends Controller
             });
         }
 
-        $patients = $query->paginate(10)->withQueryString();
+        $patients = $query->paginate(10)->appends($request->query());
 
         return view('patients.index', compact('patients'));
     }
